@@ -36,24 +36,8 @@ namespace NZWalksAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllRegions()
         {
-            var regionsDomainModel = await  regionRepository.GetAllRegionsAsync(); // await  dbContext.Regions.ToListAsync();
-
-            //Map Domain to DTOs
-            //var regionDto = new List<RegionDto>();
-            //foreach (var regionDomain in regionsDomainModel)
-            //{
-            //    regionDto.Add(new RegionDto()
-            //    {
-            //        Id = regionDomain.Id,
-            //        Name= regionDomain.Name,
-            //        Code = regionDomain.Code,
-            //        RegionImageUrl = regionDomain.RegionImageUrl,
-            //    });
-
-            //}
-
-            //using mapper 
-            //Map Domain to DTOs
+            var regionsDomainModel = await  regionRepository.GetAllRegionsAsync();
+            //maping from domainModel to DTO
             return Ok(mapper.Map<List<RegionDto>>(regionsDomainModel));
         }
 
@@ -65,41 +49,21 @@ namespace NZWalksAPI.Controllers
             {
                 return NotFound();
             }
-            //Map Region Domain model to Region DTO
 
             //Map Domain to DTOs
-            var regionDto = new RegionDto
-            {
-                    Id = regionDomainModel.Id,
-                    Name = regionDomainModel.Name,
-                    Code = regionDomainModel.Code,
-                    RegionImageUrl = regionDomainModel.RegionImageUrl,
-            };
-                                
-            return Ok(regionDto);
+            return Ok(mapper.Map<RegionDto>(regionDomainModel));
+
+
         }
 
         [HttpPost]
         public async Task <IActionResult> CreateRegion([FromBody] AddRegionRequestDto addRegionRequestDto ) {
-
-            var regionDomainModel = new Region
-            {
-                Name = addRegionRequestDto.Name,
-                Code = addRegionRequestDto.Code,
-                RegionImageUrl = addRegionRequestDto.RegionImageUrl,
-
-            };
+            //Map DTO to Domain Model
+            var regionDomainModel = mapper.Map<Region>(addRegionRequestDto);
 
             regionDomainModel =  await regionRepository.CreateRegionAsync(regionDomainModel);
             //Map Domaoin to DTO
-            var regionDto = new RegionDto
-            {
-                Id=regionDomainModel.Id,
-                Name = regionDomainModel.Name,
-                Code = regionDomainModel.Code,
-                RegionImageUrl = regionDomainModel.RegionImageUrl,
-            };
-
+            var regionDto =  mapper.Map<AddRegionRequestDto>(regionDomainModel);
             return CreatedAtAction(nameof (GetRegionByID), new {id=regionDomainModel.Id}, regionDto);
             
         }
@@ -109,12 +73,8 @@ namespace NZWalksAPI.Controllers
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRgionRequesDto  updateRgionRequesDto) {
 
             // create a new region object that holds characteristics to be updated
-            var regionFDomainModel = new Region
-            {
-                Name = updateRgionRequesDto.Name,
-                Code = updateRgionRequesDto.Code,
-                RegionImageUrl = updateRgionRequesDto.RegionImageUrl
-            };
+            var regionFDomainModel = mapper.Map<Region>(updateRgionRequesDto);
+
             var region = await regionRepository.UpdateRegionAsync(id, regionFDomainModel);
             if (region == null)
             {
@@ -122,15 +82,7 @@ namespace NZWalksAPI.Controllers
             }
 
             //Convert DomainModel to dto befor sending
-            var regionDto = new RegionDto {
-                Id=region.Id,
-                Name=region.Name,
-                Code=region.Code,
-                RegionImageUrl=region.RegionImageUrl,
-    
-            };
-
-            return Ok(regionDto);
+            return Ok(mapper.Map<RegionDto>(region));
         }
 
 
@@ -146,15 +98,7 @@ namespace NZWalksAPI.Controllers
             }
 
             //Convert DomainModel to dto befor sending 
-            var regionDto = new RegionDto {
-                Id=region.Id,
-                Name=region.Name,
-                Code=region.Code,
-                RegionImageUrl=region.RegionImageUrl,
-    
-            };
-
-            return Ok(regionDto);
+            return Ok(mapper.Map<RegionDto>(region));
         }
     
     }
