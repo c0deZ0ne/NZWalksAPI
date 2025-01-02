@@ -15,7 +15,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<NZWalksDbContext>((options) => options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksDbConnectionSting")));
 
 // start injecting repository pattern 
-builder.Services.AddScoped<IRegionRepository ,SQLRegionRepository>(); // inject the interface of the IRegionRepository interface with into the implementation of the interface
+builder.Services.AddScoped<IRegionRepository ,SQLRegionRepository>();// inject the interface of the IRegionRepository interface with into the implementation of the interface
+builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();// inject the interface of the IWalkRepository interface with into the implementation of the interface
+
+
 //end injecting repository pattern
 
 //Adding Automapper

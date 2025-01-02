@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NZWalksAPI.Data;
 
@@ -11,9 +12,11 @@ using NZWalksAPI.Data;
 namespace NZWalksAPI.Migrations
 {
     [DbContext(typeof(NZWalksDbContext))]
-    partial class NZWalksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250102121514_seeding region and dificulties")]
+    partial class seedingregionanddificulties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace NZWalksAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dificulties");
+                    b.ToTable("dificulties");
 
                     b.HasData(
                         new
@@ -51,6 +54,31 @@ namespace NZWalksAPI.Migrations
                         {
                             Id = new Guid("605f416a-44dc-467e-bc95-5400c26bb0de"),
                             Name = "Hard"
+                        },
+                        new
+                        {
+                            Id = new Guid("5359fa24-b74c-475f-9f64-d3cfeb40e436"),
+                            Name = "Nigeria"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"),
+                            Name = "United States"
+                        },
+                        new
+                        {
+                            Id = new Guid("b2c3d4e5-f678-9012-3456-7890abcdef01"),
+                            Name = "Canada"
+                        },
+                        new
+                        {
+                            Id = new Guid("c3d4e5f6-7890-1234-5678-90abcdef0123"),
+                            Name = "United Kingdom"
+                        },
+                        new
+                        {
+                            Id = new Guid("d4e5f678-9012-3456-7890-abcdef012345"),
+                            Name = "Japan"
                         });
                 });
 
@@ -74,43 +102,6 @@ namespace NZWalksAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Regions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("5359fa24-b74c-475f-9f64-d3cfeb40e436"),
-                            Code = "NGR",
-                            Name = "Nigeria",
-                            RegionImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Flag_of_Nigeria.svg/1200px-Flag_of_Nigeria.svg.png"
-                        },
-                        new
-                        {
-                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"),
-                            Code = "USA",
-                            Name = "United States",
-                            RegionImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/1200px-Flag_of_the_United_States.svg.png"
-                        },
-                        new
-                        {
-                            Id = new Guid("b2c3d4e5-f678-9012-3456-7890abcdef01"),
-                            Code = "CAN",
-                            Name = "Canada",
-                            RegionImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Flag_of_Canada.svg/1200px-Flag_of_Canada.svg.png"
-                        },
-                        new
-                        {
-                            Id = new Guid("c3d4e5f6-7890-1234-5678-90abcdef0123"),
-                            Code = "GBR",
-                            Name = "United Kingdom",
-                            RegionImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1200px-Flag_of_the_United_Kingdom.svg.png"
-                        },
-                        new
-                        {
-                            Id = new Guid("d4e5f678-9012-3456-7890-abcdef012345"),
-                            Code = "JPN",
-                            Name = "Japan",
-                            RegionImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/1200px-Flag_of_Japan.svg.png"
-                        });
                 });
 
             modelBuilder.Entity("NZWalksAPI.Models.Domains.Walk", b =>
@@ -129,13 +120,14 @@ namespace NZWalksAPI.Migrations
                     b.Property<Guid>("DificultyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("LenghtInKm")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("RegionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("WalkImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("lenghtInKm")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

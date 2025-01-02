@@ -20,7 +20,6 @@ namespace NZWalksAPI.Controllers
     public class RegionsController : ControllerBase
     {
         //cretae a private readonly dbcontext for this class only to use to interact with the db
-        private readonly NZWalksDbContext dbContext;
         //create and initialize the repository for use in this constructor
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
@@ -28,7 +27,6 @@ namespace NZWalksAPI.Controllers
         //constructor for this clasee that inject the context to the variable  dbContext
         public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper)
         {
-            this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
         }
