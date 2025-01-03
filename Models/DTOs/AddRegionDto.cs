@@ -10,6 +10,7 @@ namespace NZWalksAPI.Models.DTOs
 
         [Required(ErrorMessage = "Please provide a Code")]
         [MaxLength(3, ErrorMessage = "Code has a maximum of 3 characters")]
+        [MinLength(3, ErrorMessage = "Code has a minimum of 3 characters")]
         public required string Code { get; set; }
         public string? RegionImageUrl { get; set; }
     }
