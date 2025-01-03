@@ -9,9 +9,6 @@ using NZWalksAPI.Repositories;
 namespace NZWalksAPI.Controllers
 {
   
-
-    //htts://localhost:1234/api/controllerName eg "walks"
-
     [Route("api/[controller]")]
     [ApiController]
     public class WalksController(IWalkRepository walkRepository, IMapper mapper) : ControllerBase
@@ -31,14 +28,14 @@ namespace NZWalksAPI.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetWalkByID(Guid id)
         {
-            var regionDomainModel = await walkRepository.GetWalksByIDAsync(id);
-            if (regionDomainModel == null)
+            var walkDomainModel = await walkRepository.GetWalksByIDAsync(id);
+            if (walkDomainModel == null)
             {
                 return NotFound();
             }
 
             //Map Domain to DTOs
-            return Ok(mapper.Map<RegionDto>(regionDomainModel));
+            return Ok(mapper.Map<WalkDto>(walkDomainModel));
 
 
         }
@@ -60,40 +57,38 @@ namespace NZWalksAPI.Controllers
 
         }
 
-        //[HttpPut]
-        //[Route("{id:Guid}")]
-        //public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRgionRequesDto updateRgionRequesDto)
-        //{
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, [FromBody] UpdateWalkDto updateWalkDto)
+        {
+            // Map DTO to Dmain Model
+            var walkDomainModel = mapper.Map<Walk>(updateWalkDto);
+            var walk = await walkRepository.UpdateWalksAsync(id, walkDomainModel);
+            if (walk == null)
+            {
+                return NotFound();
+            }
 
-        //    // create a new region object that holds characteristics to be updated
-        //    var regionFDomainModel = mapper.Map<Region>(updateRgionRequesDto);
-
-        //    var region = await regionRepository.UpdateRegionAsync(id, regionFDomainModel);
-        //    if (region == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //Convert DomainModel to dto befor sending
-        //    return Ok(mapper.Map<RegionDto>(region));
-        //}
+            //Convert DomainModel to dto befor sending
+            return Ok(mapper.Map<WalkDto>(walk));
+        }
 
 
-        //[HttpDelete]
-        //[Route("{id:Guid}")]
-        //public async Task<IActionResult> DeleteRegion([FromRoute] Guid id)
-        //{
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteWalk([FromRoute] Guid id)
+        {
 
-        //    // check if region exits 
-        //    var region = await regionRepository.DeleteRegionAsync(id);
-        //    if (region == null)
-        //    {
-        //        return NotFound();
-        //    }
+            // check if region exits 
+            var walk = await walkRepository.DeleteWalksAsync(id);
+            if (walk == null)
+            {
+                return NotFound();
+            }
 
-        //    //Convert DomainModel to dto befor sending 
-        //    return Ok(mapper.Map<RegionDto>(region));
-        //}
+            //Convert DomainModel to dto befor sending 
+            return Ok(mapper.Map<WalkDto>(walk));
+        }
 
     }
 

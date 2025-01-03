@@ -16,7 +16,7 @@ namespace NZWalksAPI.Repositories
         public async Task<Walk?> GetWalksByIDAsync(Guid id)
         {
             // using LINQ method 
-            return await dbContext.Walks.FirstOrDefaultAsync((x) => x.Id == id);
+            return await dbContext.Walks.Include("Dificulty").Include("Region"). FirstOrDefaultAsync((x) => x.Id == id);
 
         }
 
@@ -27,35 +27,36 @@ namespace NZWalksAPI.Repositories
             return walk;
         }
 
-        //public async Task<Walk?> UpdateWalksAsync(Guid id, Walk walk)
-        //{
-        //    // check if region exits 
-        //    var walkData = await dbContext.Regions.FirstOrDefaultAsync((x) => x.Id == id);
-        //    if (walkData == null)
-        //    {
-        //        return null;
-        //    }
+        public async Task<Walk?> UpdateWalksAsync(Guid id, Walk walk)
+        {
+            // check if region exits 
+            var walkData = await dbContext.Walks.FirstOrDefaultAsync((x) => x.Id == id);
+            if (walkData == null)
+            {
+                return null;
+            }
 
-        //    walkData.Name = region.Name;
-        //    walkData.Code = region.Code;
-        //    walkData.RegionImageUrl = region.RegionImageUrl;
+            walkData.DificultyId = walk.DificultyId;
+            walkData.WalkImageUrl = walk.WalkImageUrl;
+            walkData.LenghtInKm = walk.LenghtInKm;
+            walkData.Description = walk.Description;
+            walkData.RegionId = walk.RegionId;
+            await dbContext.SaveChangesAsync();
+            return walkData;
+        }
 
-        //    await dbContext.SaveChangesAsync();
-        //    return regionData;
-        //}
+        public async Task<Walk?> DeleteWalksAsync(Guid id)
+        {
+            var walk = await dbContext.Walks.FirstOrDefaultAsync((x) => x.Id == id);
+            if (walk == null)
+            {
+                return null;
+            }
 
-        //public async Task<Region?> DeleteRegionAsync(Guid id)
-        //{
-        //    var region = await dbContext.Regions.FirstOrDefaultAsync((x) => x.Id == id);
-        //    if (region == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    dbContext.Remove(region);
-        //    await dbContext.SaveChangesAsync();
-        //    return region;
-        //}
+            dbContext.Remove(walk);
+            await dbContext.SaveChangesAsync();
+            return walk;
+        }
 
 
     }
